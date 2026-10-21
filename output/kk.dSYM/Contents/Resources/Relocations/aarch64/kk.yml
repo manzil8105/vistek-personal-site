@@ -1,0 +1,5 @@
+---
+triple:          'arm64-apple-darwin'
+binary-path:     '/Users/manzilahsan/coding/projects/vistek-personal-site/output/kk'
+relocations:     []
+...
