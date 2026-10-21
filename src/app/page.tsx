@@ -120,7 +120,7 @@ export default async function PublicFeed({
                 [GITHUB]
               </a>
               <a
-                href="https://shorturl.at/ODkPC"
+                href="https://linktr.ee/manzil.8105"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-xs text-[#00f3ff] border border-[#00f3ff]/50 px-3 py-1.5 hover:bg-[#00f3ff] hover:text-black hover:shadow-[0_0_10px_rgba(0,243,255,0.8)] transition-all uppercase tracking-widest font-bold"
