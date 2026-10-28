@@ -1,15 +1,18 @@
 import { db } from "@/db";
 import { tags, postTags } from "@/db/schema";
-import { asc, sql, ilike } from "drizzle-orm"; // Changed desc to asc, added ilike
+import { asc, sql, ilike } from "drizzle-orm";
 import { createTag, deleteTag } from "@/app/actions/tags";
 import DeleteTagButton from "@/components/DeleteTagButton";
-import TagSearch from "@/components/TagSearch"; // NEW IMPORT
+import TagSearch from "@/components/TagSearch";
+import CornerBrackets from "@/components/CornerBrackets";
+import { requireAdminSession } from "@/lib/session";
 
 export default async function ManageTags({
   searchParams,
 }: {
   searchParams: Promise<{ q?: string }>;
 }) {
+  await requireAdminSession();
   const resolvedParams = await searchParams;
   const searchQuery = resolvedParams.q || "";
 
@@ -32,84 +35,102 @@ export default async function ManageTags({
   const countMap = new Map(tagCounts.map((tc) => [tc.tagId, Number(tc.count)]));
 
   return (
-    <div className="flex flex-col h-full text-white font-mono">
-      <div className="flex justify-between items-center mb-6 border-b border-[#00f3ff]/30 pb-4">
-        <h2 className="text-xl text-[#00f3ff] uppercase tracking-widest drop-shadow-[0_0_5px_rgba(0,243,255,0.5)]">
-          Data_Core // Tags
-        </h2>
+    <div className="flex flex-col h-full font-mono text-xs">
+      {/* top header */}
+      <div className="flex justify-between items-center mb-6 border-b border-white/[0.08] pb-4">
+        <div>
+          <div className="text-[10px] uppercase tracking-widest text-[#ff007f] font-semibold mb-1">
+            &gt;&gt; TAXONOMY_MATRIX // INDEX
+          </div>
+          <h2 className="font-display text-2xl text-white font-normal tracking-tight">
+            Tags
+          </h2>
+        </div>
+        <span className="text-white/40 text-[11px]">
+          Total Tags: [{allTags.length}]
+        </span>
       </div>
 
       {/* add tag form */}
       <form
         action={createTag}
-        className="mb-6 flex gap-4 p-4 border border-[#ff00aa]/30 bg-black/50 shadow-[0_0_15px_rgba(255,0,170,0.05)]"
+        className="mb-6 flex flex-col sm:flex-row gap-3 p-4 border border-white/10 bg-[#0a0a0c] rounded-[2px] shadow-[0_10px_25px_rgba(0,0,0,0.6)] relative"
       >
-        <input
-          type="text"
-          name="name"
-          placeholder="NEW_TAG_NAME..."
-          required
-          className="flex-1 bg-black border border-[#4a0d3a] focus:border-[#ff00aa] focus:shadow-[0_0_10px_rgba(255,0,170,0.4)] px-4 py-2 text-[#ff00aa] outline-none placeholder-[#ff00aa]/30 uppercase tracking-widest text-sm transition-all"
-        />
+        <CornerBrackets color="var(--neon-magenta)" size={6} />
+        <div className="relative flex-1">
+          <input
+            type="text"
+            name="name"
+            placeholder="NEW_TAG_NAME..."
+            required
+            className="w-full bg-[#050505] border border-white/10 focus:border-[#ff007f] focus:shadow-[0_0_10px_rgba(255,0,127,0.3)] px-3.5 py-2 text-[#ff007f] outline-none placeholder-white/20 uppercase tracking-widest font-mono text-xs rounded-[2px] transition-all"
+          />
+        </div>
         <button
           type="submit"
-          className="px-6 py-2 bg-transparent border-2 border-[#00f3ff] text-[#00f3ff] font-bold hover:bg-[#00f3ff] hover:text-black hover:shadow-[0_0_15px_rgba(0,243,255,0.8)] transition-all uppercase tracking-widest cursor-pointer"
+          className="px-5 py-2 bg-white hover:bg-cyan-300 text-black font-mono font-bold text-xs uppercase tracking-wider rounded-[2px] transition-all hover:shadow-[0_0_12px_rgba(0,240,255,0.5)] cursor-pointer flex items-center justify-center gap-1.5"
         >
-          [ADD_TAG]
+          <span>[+] Add Tag</span>
         </button>
       </form>
 
-      {/* injected search bar */}
+      {/* injected search filter */}
       <div className="mb-4">
         <TagSearch />
       </div>
 
-      {/* forced scroll container, max-h-[500px] ensures it scrolls internally */}
-      <div className="flex-grow overflow-auto relative z-10 max-h-[500px] border border-[#00f3ff]/20 bg-black/40 p-2">
+      {/* scrollable tags table */}
+      <div className="flex-grow overflow-x-auto relative z-10 max-h-[480px] border border-white/[0.08] rounded-[2px] bg-[#0a0a0c]">
         {allTags.length === 0 ? (
-          <p className="text-[#00f3ff]/50 animate-pulse text-center mt-10 uppercase tracking-widest">
-            No tags match search query...
-          </p>
+          <div className="p-12 text-center text-cyan-400/60 uppercase tracking-widest animate-pulse">
+            &gt;&gt; NO TAXONOMY TAGS MATCH QUERY...
+          </div>
         ) : (
           <table className="w-full text-left border-collapse">
-            <thead className="sticky top-0 bg-black z-20">
-              <tr className="border-b border-[#ff00aa]/50 text-[#ff00aa]">
-                <th className="p-2 uppercase text-xs tracking-wider bg-black">
-                  Name
+            <thead className="sticky top-0 bg-[#050505] z-20">
+              <tr className="border-b border-white/10 text-[#9ca3af]">
+                <th className="p-3 uppercase text-[10px] tracking-widest font-semibold">
+                  Tag Identifier
                 </th>
-                <th className="p-2 uppercase text-xs tracking-wider bg-black">
+                <th className="p-3 uppercase text-[10px] tracking-widest font-semibold">
                   Slug
                 </th>
-                <th className="p-2 uppercase text-xs tracking-wider text-center bg-black">
+                <th className="p-3 uppercase text-[10px] tracking-widest font-semibold text-center">
                   Active Uses
                 </th>
-                <th className="p-2 uppercase text-xs tracking-wider bg-black">
+                <th className="p-3 uppercase text-[10px] tracking-widest font-semibold">
                   Created
                 </th>
-                <th className="p-2 uppercase text-xs tracking-wider text-right bg-black">
+                <th className="p-3 uppercase text-[10px] tracking-widest font-semibold text-right">
                   Action
                 </th>
               </tr>
             </thead>
-            <tbody>
+            <tbody className="divide-y divide-white/[0.05]">
               {allTags.map((tag) => (
                 <tr
                   key={tag.id}
-                  className="border-b border-[#00f3ff]/10 hover:bg-[#00f3ff]/5 transition-colors"
+                  className="hover:bg-white/[0.02] transition-colors"
                 >
-                  <td className="p-2 text-[#00f3ff] font-bold uppercase">
-                    {tag.name}
+                  <td className="p-3 text-cyan-300 font-bold uppercase">
+                    #{tag.name}
                   </td>
-                  <td className="p-2 text-xs text-[#00f3ff]/50">{tag.slug}</td>
-                  <td className="p-2 text-center text-xs text-[#ff00aa] font-bold">
-                    {countMap.get(tag.id) || 0}
+                  <td className="p-3 text-[11px] text-gray-500">{tag.slug}</td>
+                  <td className="p-3 text-center">
+                    <span className="font-mono text-xs text-[#ff007f] bg-[#ff007f]/10 border border-[#ff007f]/30 px-2 py-0.5 rounded-[2px] font-bold">
+                      {countMap.get(tag.id) || 0}
+                    </span>
                   </td>
-                  <td className="p-2 text-xs text-gray-500">
+                  <td className="p-3 text-gray-400 text-[11px]">
                     {tag.createdAt
-                      ? new Date(tag.createdAt).toLocaleDateString()
+                      ? new Date(tag.createdAt).toLocaleDateString("en-US", {
+                          year: "numeric",
+                          month: "short",
+                          day: "2-digit",
+                        })
                       : "UNKNOWN"}
                   </td>
-                  <td className="p-2 text-right">
+                  <td className="p-3 text-right">
                     <form action={deleteTag}>
                       <input type="hidden" name="id" value={tag.id} />
                       <DeleteTagButton />

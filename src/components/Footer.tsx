@@ -1,65 +1,78 @@
-import Link from "next/link";
+import SpectralBar from "./SpectralBar";
 
 export default function Footer() {
   const currentYear = new Date().getFullYear();
 
   return (
-    <footer className="border-t border-[#00f3ff]/30 bg-[#05010f] py-12 font-mono text-white relative overflow-hidden mt-10">
-      {/* subtle cyberpunk scanline background */}
-      <div className="absolute inset-0 bg-[linear-gradient(rgba(0,243,255,0.03)_1px,transparent_1px)] bg-[size:100%_4px] pointer-events-none"></div>
+    <footer className="border-t border-white/[0.08] bg-[#050505] text-[#9ca3af] font-mono text-xs relative overflow-hidden mt-20">
+      <SpectralBar height={2} />
 
-      <div className="max-w-4xl mx-auto px-8 flex flex-col md:flex-row justify-between items-center md:items-start gap-8 relative z-10">
-        {/* Brand Section */}
-        <div className="flex flex-col items-center md:items-start">
-          <span className="text-[#00f3ff] text-2xl font-bold uppercase tracking-widest drop-shadow-[0_0_5px_rgba(0,243,255,0.5)]">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 py-12 flex flex-col md:flex-row justify-between items-center md:items-start gap-8 relative z-10">
+        {/* brand section */}
+        <div className="flex flex-col items-center md:items-start text-center md:text-left">
+          <span className="font-display text-2xl font-normal text-white tracking-tight">
             MANZIL
           </span>
-          <span className="text-[#ff00aa] text-xs uppercase tracking-widest mt-1 font-bold">
-            // End_Of_Transmission
+          <span className="text-[#ff007f] text-[10px] uppercase tracking-widest mt-1 font-mono">
+            {"// END_OF_TRANSMISSION // SYS_INIT_OK"}
           </span>
+          <p className="text-gray-500 text-[11px] mt-2 max-w-xs font-sans">
+            
+          </p>
         </div>
 
-        {/* Navigation / External Links */}
-        <div className="flex flex-col items-center md:items-start gap-3">
-          <span className="text-[#00f3ff]/50 text-xs uppercase tracking-widest mb-1 border-b border-[#00f3ff]/20 pb-1">
-            System_Links
+        {/* external links */}
+        <div className="flex flex-col items-center md:items-start gap-2">
+          <span className="text-cyan-400/60 text-[10px] uppercase tracking-widest mb-1 border-b border-white/[0.08] pb-1 w-full text-center md:text-left">
+            &gt;&gt; LINKS
           </span>
-          <div className="flex gap-6 text-sm uppercase tracking-widest text-gray-300 font-bold">
+          <div className="flex flex-wrap justify-center gap-4 text-xs uppercase tracking-wider text-gray-300">
+            <a
+              href="https://your-portfolio.com"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="hover:text-cyan-300 hover:drop-shadow-[0_0_8px_rgba(0,240,255,0.6)] transition-all"
+            >
+              [PORTFOLIO]
+            </a>
             <a
               href="https://instagram.com/manzil_mahim/"
               target="_blank"
               rel="noopener noreferrer"
-              className="hover:text-[#ff00aa] hover:drop-shadow-[0_0_5px_rgba(255,0,170,0.8)] transition-all"
+              className="hover:text-[#ff007f] hover:drop-shadow-[0_0_8px_rgba(255,0,127,0.6)] transition-all"
             >
-              INSTAGRAM
+              [INSTAGRAM]
             </a>
             <a
               href="https://github.com/manzil8105"
               target="_blank"
               rel="noopener noreferrer"
-              className="hover:text-[#ff00aa] hover:drop-shadow-[0_0_5px_rgba(255,0,170,0.8)] transition-all"
+              className="hover:text-cyan-300 hover:drop-shadow-[0_0_8px_rgba(0,240,255,0.6)] transition-all"
             >
-              GitHub
+              [GITHUB]
             </a>
             <a
-              href="https://shorturl.at/ODkPC"
+              href="https://linktr.ee/manzil.8105"
               target="_blank"
               rel="noopener noreferrer"
-              className="hover:text-[#ff00aa] hover:drop-shadow-[0_0_5px_rgba(255,0,170,0.8)] transition-all"
+              className="hover:text-[#ff6600] hover:drop-shadow-[0_0_8px_rgba(255,102,0,0.6)] transition-all"
             >
-              Linktree
+              [LINKTREE]
             </a>
           </div>
         </div>
 
-        {/* Copyright & Status */}
-        <div className="flex flex-col items-center md:items-end text-right gap-1">
+        {/* copyright and telemetry status */}
+        <div className="flex flex-col items-center md:items-end text-center md:text-right gap-1.5">
           <span className="text-gray-500 text-[10px] uppercase tracking-widest">
-            © {currentYear} Manzil Ahsan. All rights reserved.
+            &copy; {currentYear} Manzil Ahsan. All rights reserved.
           </span>
-          <span className="text-[#00f3ff]/40 text-[10px] uppercase tracking-widest flex items-center gap-2 mt-1">
-            <span className="w-2 h-2 bg-green-500 rounded-full animate-pulse border border-green-300"></span>
-            SYSTEM_VERSION 1.0.0 // ONLINE
+          <span className="text-cyan-400/50 text-[10px] uppercase tracking-widest flex items-center gap-2">
+            <span className="relative flex h-2 w-2">
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#00ff66] opacity-75" />
+              <span className="relative inline-flex rounded-full h-2 w-2 bg-[#00ff66]" />
+            </span>
+            SYSTEM_VERSION 2
           </span>
         </div>
       </div>

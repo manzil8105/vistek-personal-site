@@ -5,8 +5,10 @@ import { posts, tags, postTags } from "@/db/schema";
 import { eq } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
+import { requireAdminSession } from "@/lib/session";
 
 export async function createPost(formData: FormData) {
+  await requireAdminSession();
   const title = formData.get("title") as string;
   const slug = formData.get("slug") as string;
   const contentHtml = formData.get("contentHtml") as string;
@@ -66,6 +68,7 @@ export async function createPost(formData: FormData) {
 }
 
 export async function updatePost(formData: FormData) {
+  await requireAdminSession();
   const id = formData.get("id") as string;
   const title = formData.get("title") as string;
   const slug = formData.get("slug") as string;
@@ -128,13 +131,14 @@ export async function updatePost(formData: FormData) {
 }
 
 export async function deletePost(formData: FormData) {
+  await requireAdminSession();
   const id = formData.get("id") as string;
   if (!id) throw new Error("Post ID required");
 
-  // cascading delete automatically wipes linked tags and likes in the DB
+  // cascading delete automatically wipes linked tags in the DB
   await db.delete(posts).where(eq(posts.id, id));
 
   revalidatePath("/admin/posts");
-  revalidatePath("/"); // Update public feed
+  revalidatePath("/"); // update public feed
   redirect("/admin/posts");
 }

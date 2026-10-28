@@ -4,8 +4,10 @@ import { db } from "@/db";
 import { tags } from "@/db/schema";
 import { eq } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
+import { requireAdminSession } from "@/lib/session";
 
 export async function createTag(formData: FormData) {
+  await requireAdminSession();
   const name = formData.get("name") as string;
   if (!name) throw new Error("Tag name required");
 
@@ -23,6 +25,7 @@ export async function createTag(formData: FormData) {
 }
 
 export async function deleteTag(formData: FormData) {
+  await requireAdminSession();
   const id = formData.get("id") as string;
   if (!id) throw new Error("Tag ID required");
 

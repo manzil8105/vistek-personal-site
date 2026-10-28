@@ -15,7 +15,6 @@ export default function CopyLinkButton({
     e.preventDefault();
     e.stopPropagation();
 
-    // dynamically get the current domain
     const url = `${window.location.origin}/${slug}`;
 
     navigator.clipboard.writeText(url).then(() => {
@@ -24,17 +23,18 @@ export default function CopyLinkButton({
     });
   };
 
-  const defaultStyle =
-    "text-xs uppercase tracking-widest border px-2 py-1 transition-all font-bold cursor-pointer";
+  const baseStyle =
+    "font-mono text-[11px] uppercase tracking-wider px-2.5 py-1 border rounded-[2px] transition-all cursor-pointer font-medium";
   const idleStyle =
-    "text-[#00f3ff] border-[#00f3ff]/50 hover:bg-[#00f3ff] hover:text-black hover:shadow-[0_0_10px_rgba(0,243,255,0.8)]";
+    "text-cyan-400 border-cyan-400/30 bg-black/40 hover:border-cyan-400 hover:text-white hover:bg-cyan-950/20 hover:shadow-[0_0_10px_rgba(0,240,255,0.35)]";
   const copiedStyle =
-    "text-black bg-[#00f3ff] border-[#00f3ff] shadow-[0_0_10px_rgba(0,243,255,0.8)]";
+    "text-white bg-[#ff007f] border-[#ff007f] shadow-[0_0_12px_rgba(255,0,127,0.5)] font-bold";
 
   return (
     <button
+      type="button"
       onClick={handleCopy}
-      className={`${defaultStyle} ${copied ? copiedStyle : idleStyle} ${className || ""}`}
+      className={`${baseStyle} ${copied ? copiedStyle : idleStyle} ${className || ""}`}
       title="Copy link to clipboard"
     >
       {copied ? "[COPIED!]" : "[COPY_LINK]"}

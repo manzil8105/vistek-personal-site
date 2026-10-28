@@ -11,50 +11,52 @@ export default function Pagination({
   currentPage: number;
 }) {
   const searchParams = useSearchParams();
-  const pathname = usePathname(); // NEW
+  const pathname = usePathname();
 
   const createPageUrl = (pageNumber: number) => {
     const params = new URLSearchParams(searchParams);
     params.set("page", pageNumber.toString());
-
-    // Changed from `/?${params.toString()}`
     return `${pathname}?${params.toString()}`;
   };
 
   if (totalPages <= 1) return null;
 
-  // Generate an array of numbers: [1, 2, 3, ...]
   const pageNumbers = Array.from({ length: totalPages }, (_, i) => i + 1);
 
   return (
-    <div className="mt-12 flex justify-between items-center border-t border-[#00f3ff]/30 pt-6 font-mono">
+    <nav
+      aria-label="Pagination Navigation"
+      className="mt-12 flex justify-between items-center border-t border-white/[0.08] pt-6 font-mono text-xs"
+    >
       {/* left side prev button */}
       <div className="flex-1 flex justify-start">
-        {currentPage > 1 && (
+        {currentPage > 1 ? (
           <Link
             href={createPageUrl(currentPage - 1)}
-            className="text-[#ff00aa] hover:text-[#00f3ff] transition-colors text-sm uppercase tracking-widest border border-[#ff00aa] hover:border-[#00f3ff] px-4 py-2 bg-black"
+            className="text-cyan-400 hover:text-white uppercase tracking-widest border border-cyan-400/30 hover:border-cyan-400 px-3.5 py-1.5 bg-[#0a0a0c] rounded-[2px] hover:shadow-[0_0_10px_rgba(0,240,255,0.3)] transition-all"
           >
-            {"<- PREV"}
+            [&larr; PREV]
           </Link>
+        ) : (
+          <span className="opacity-0 pointer-events-none">[&larr; PREV]</span>
         )}
       </div>
 
       {/* center page numbers */}
-      <div className="flex gap-2 overflow-x-auto px-4">
+      <div className="flex gap-2 overflow-x-auto px-4 py-1">
         {pageNumbers.map((num) => {
           const isActive = num === currentPage;
           return (
             <Link
               key={num}
               href={createPageUrl(num)}
-              className={`flex items-center justify-center min-w-[32px] h-8 text-xs font-bold border transition-all cursor-pointer ${
+              className={`flex items-center justify-center min-w-[32px] h-8 px-2 text-xs font-mono rounded-[2px] border transition-all cursor-pointer ${
                 isActive
-                  ? "bg-[#ff00aa] text-black border-[#ff00aa] shadow-[0_0_10px_rgba(255,0,170,0.6)]"
-                  : "bg-black text-[#00f3ff] border-[#00f3ff]/50 hover:border-[#00f3ff] hover:shadow-[0_0_8px_rgba(0,243,255,0.4)]"
+                  ? "bg-[#ff007f] text-white border-[#ff007f] shadow-[0_0_12px_rgba(255,0,127,0.5)] font-bold"
+                  : "bg-[#0a0a0c] text-gray-300 border-white/10 hover:border-cyan-400 hover:text-cyan-300 hover:shadow-[0_0_8px_rgba(0,240,255,0.25)]"
               }`}
             >
-              {num}
+              {num < 10 ? `0${num}` : num}
             </Link>
           );
         })}
@@ -62,15 +64,17 @@ export default function Pagination({
 
       {/* right side next button */}
       <div className="flex-1 flex justify-end">
-        {currentPage < totalPages && (
+        {currentPage < totalPages ? (
           <Link
             href={createPageUrl(currentPage + 1)}
-            className="text-[#ff00aa] hover:text-[#00f3ff] transition-colors text-sm uppercase tracking-widest border border-[#ff00aa] hover:border-[#00f3ff] px-4 py-2 bg-black"
+            className="text-cyan-400 hover:text-white uppercase tracking-widest border border-cyan-400/30 hover:border-cyan-400 px-3.5 py-1.5 bg-[#0a0a0c] rounded-[2px] hover:shadow-[0_0_10px_rgba(0,240,255,0.3)] transition-all"
           >
-            {"NEXT ->"}
+            [NEXT &rarr;]
           </Link>
+        ) : (
+          <span className="opacity-0 pointer-events-none">[NEXT &rarr;]</span>
         )}
       </div>
-    </div>
+    </nav>
   );
 }

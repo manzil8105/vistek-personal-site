@@ -1,21 +1,31 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { DM_Serif_Display, JetBrains_Mono, Syne } from "next/font/google";
 import "./globals.css";
+import CrtController from "@/components/CrtController";
+import CustomCursor from "@/components/CustomCursor";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+const dmSerifDisplay = DM_Serif_Display({
+  weight: "400",
   subsets: ["latin"],
+  variable: "--font-display-serif",
+  display: "swap",
 });
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
+const jetbrainsMono = JetBrains_Mono({
   subsets: ["latin"],
+  variable: "--font-jetbrains-mono",
+  display: "swap",
 });
 
-//  this controls the browser tab and SEO
+const syne = Syne({
+  subsets: ["latin"],
+  variable: "--font-syne",
+  display: "swap",
+});
+
 export const metadata: Metadata = {
-  title: "MANZIL",
-  description: "Personal transmission log and databank.",
+  title: "MANZIL // RECORDS",
+  description: "records log, computational experiments, writings and tactical engineering notes.",
 };
 
 export default function RootLayout({
@@ -27,9 +37,14 @@ export default function RootLayout({
     <html
       lang="en"
       suppressHydrationWarning
-      className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
+      className={`${dmSerifDisplay.variable} ${jetbrainsMono.variable} ${syne.variable} h-full antialiased`}
     >
-      <body suppressHydrationWarning className="min-h-full flex flex-col">
+      <body
+        suppressHydrationWarning
+        className="min-h-full flex flex-col bg-[#030303] text-[#f3f4f6] ambient-grid selection:bg-[#ff007f] selection:text-white"
+      >
+        <CrtController />
+        <CustomCursor />
         {children}
       </body>
     </html>
